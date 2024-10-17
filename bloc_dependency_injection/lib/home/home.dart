@@ -1,5 +1,6 @@
 import 'package:bloc_dependency_injection/bloc/counter.dart';
 import 'package:bloc_dependency_injection/home/merah.dart';
+import 'package:bloc_dependency_injection/other/other.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -18,6 +19,26 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
         title: const Text("DEPENDENCY INJECTION"),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+                builder: (context) => BlocProvider.value(
+                      value: mycounter,
+                      child: const OtherPage(),
+                    )
+                // Kurang Efektif
+                // BlocProvider(
+                //   create: (context) => mycounter,
+                //   child: const OtherPage(),
+                // ),
+                ),
+          );
+        },
+        child: const Icon(
+          Icons.arrow_forward,
+        ),
       ),
       body: Center(
         child: Row(
