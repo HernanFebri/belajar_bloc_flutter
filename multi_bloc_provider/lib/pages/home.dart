@@ -19,16 +19,56 @@ class HomePage extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            BlocBuilder<CounterBloc, int>(
-              bloc: myCounter,
-              builder: (context, state) {
-                return Text(
-                  "$state",
-                  style: const TextStyle(
-                    fontSize: 50,
-                  ),
-                );
-              },
+            MultiBlocListener(
+              listeners: [
+                // LISTEN TEMA
+                BlocListener<ThemeBloc, bool>(
+                  listener: (context, state) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("TEMA GELAP AKTIF"),
+                        duration: Duration(seconds: 1),
+                      ),
+                    );
+                  },
+                  listenWhen: (previous, current) {
+                    if (current == false) {
+                      return true;
+                    } else {
+                      return false;
+                    }
+                  },
+                ),
+                // LISTEN COUNTER
+                BlocListener<CounterBloc, int>(
+                  listener: (context, state) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("DI ATAS 10"),
+                        duration: Duration(seconds: 1),
+                      ),
+                    );
+                  },
+                  listenWhen: (previous, current) {
+                    if (current > 10) {
+                      return true;
+                    } else {
+                      return false;
+                    }
+                  },
+                ),
+              ],
+              child: BlocBuilder<CounterBloc, int>(
+                bloc: myCounter,
+                builder: (context, state) {
+                  return Text(
+                    "$state",
+                    style: const TextStyle(
+                      fontSize: 50,
+                    ),
+                  );
+                },
+              ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
